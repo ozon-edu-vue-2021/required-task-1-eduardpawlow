@@ -62,7 +62,7 @@ const showLoader = function () {
 const hideLoader = function () {
     loaderTimeout = setTimeout(function () {
         loader.style.visibility = 'hidden';
-        loaderTimeout.clearTimeout();
+        clearTimeout(loaderTimeout);
     }, 700);
 }
 
@@ -91,10 +91,10 @@ const renderPictures = function (list) {
         throw Error(`Pictures not defined. The list length: ${list.length}`);
     }
 
-    const clone = templateImageCard.content.cloneNode(true);
     const fragment = document.createDocumentFragment();
 
     list.forEach(function (element) {
+        const clone = templateImageCard.content.cloneNode(true);
         const link = clone.querySelector('a');
 
         link.href = element.url;
@@ -121,17 +121,20 @@ const renderPopupPicture = function (picture) {
     const img = clone.querySelector('img');
     const link = clone.querySelector('a');
     const author = clone.querySelector('.author');
-
+    
     img.src = cropImage(picture.download_url, 2);
     img.alt = picture.author;
+    img.onload = () => {
+        hideLoader();
+        togglePopup();
+    }
+
     author.textContent = picture.author;
     img.width = picture.width / 10;
     link.href = picture.download_url;
 
     popupContainer.innerHTML = '';
     popupContainer.appendChild(clone)
-    hideLoader();
-    togglePopup();
 }
 
 /**
@@ -152,7 +155,7 @@ const togglePopup = function () {
 const actionHandler = function (evt) {
     evt.preventDefault();
     const nextPage = evt.currentTarget.dataset.page;
-    evt.currentTarget.dataset.page = nextPage + 1;
+    evt.currentTarget.dataset.page = Number(nextPage) + 1;
 
     if (nextPage > MAX_PAGE_IAMGES) {
         console.warn(`WARN: You are trying to call a page that exceeds ${MAX_PAGE_IAMGES}`);
@@ -171,8 +174,9 @@ const actionHandler = function (evt) {
 const imageHandler = function (evt) {
     evt.preventDefault();
 
-    if (evt.target.closest('a')) {
-        getPictureInfo(evt.target.dataset.id);
+    const link = evt.target.closest('a');
+    if (link) {
+        getPictureInfo(link.dataset.id);
     }
 }
 

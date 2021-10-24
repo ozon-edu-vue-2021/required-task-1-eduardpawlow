@@ -9,8 +9,7 @@ body {
 img {
     width: 100%;
     max-width: 100%;
-    display: bloсk;
-    vertical-align: middle;
+    display: block;
 }
 
 a {
@@ -74,7 +73,7 @@ main .action:hover {
     min-height: 400px;
 }
 
-a {
+main .images a {
     display: inline-block;
     border-radius: 6px;
     overflow: hidden;
@@ -82,15 +81,15 @@ a {
     min-height: 100px;
 }
 
-a:nth-child(n) {
+main .images a:nth-child(n) {
     background-color: #EFEBE9;
 }
 
-a:nth-child(2n) {
+main .images a:nth-child(2n) {
     background-color: #D7CCC8;
 }
 
-a:nth-child(3n) {
+main .images a:nth-child(3n) {
     background-color: #BCAAA4;
 }
 
